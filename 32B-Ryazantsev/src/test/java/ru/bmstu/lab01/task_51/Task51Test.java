@@ -44,4 +44,27 @@ class Task51Test {
         }
         assertEquals(expected.replace("\n", System.lineSeparator()), buf.toString(StandardCharsets.UTF_8));
     }
+    @Test
+    void invalidInput() {
+        var in = new ByteArrayInputStream("0 2\n".getBytes(StandardCharsets.UTF_8));
+        var out = new PrintStream(new ByteArrayOutputStream());
+        assertThrows(IllegalArgumentException.class, () -> Task51.run(in, out));
+    }
+
+    @Test
+    void shouldKeepNegativeMaximum() {
+        assertArrayEquals(new int[] {-2}, Task51.solve(new int[][] {{-8, -2, -5}}));
+    }
+
+    @Test
+    void shouldRejectEmptyRow() {
+        assertThrows(IllegalArgumentException.class, () -> Task51.solve(new int[][] {{}}));
+        assertThrows(IllegalArgumentException.class, () -> Task51.solve(new int[][] {null}));
+    }
+
+    @Test
+    void shouldRejectZeroColumns() {
+        var in = new ByteArrayInputStream("1 0\n".getBytes(StandardCharsets.UTF_8));
+        assertThrows(IllegalArgumentException.class, () -> Task51.run(in, System.out));
+    }
 }
