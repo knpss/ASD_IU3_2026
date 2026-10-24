@@ -1,5 +1,4 @@
 package ru.bmstu.lab01.task_59;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.ByteArrayInputStream;
@@ -41,5 +40,28 @@ class Task59Test {
             Task59.run(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), out);
         }
         assertEquals(expected.replace("\n", System.lineSeparator()), buf.toString(StandardCharsets.UTF_8));
+    }
+    @Test
+    void mixed() {
+        assertEquals(BigInteger.valueOf(57),
+                Task59.solve(new int[][] {{2,-1,0},{3,4,1},{5,2,6}}));
+    }
+    @Test
+    void invalidInput() {
+        var in = new ByteArrayInputStream("2 2\n".getBytes(StandardCharsets.UTF_8));
+        var out = new PrintStream(new ByteArrayOutputStream());
+        assertThrows(IllegalArgumentException.class, () -> Task59.run(in, out));
+    }
+
+    @Test
+    void shouldRejectShortFirstRow() {
+        assertThrows(IllegalArgumentException.class, () ->
+                Task59.solve(new int[][] {{1, 2}, {3, 4, 5}, {6, 7, 8}}));
+    }
+
+    @Test
+    void shouldHandleRowSwap() {
+        assertEquals(BigInteger.valueOf(-1),
+                Task59.solve(new int[][] {{0, 1, 0}, {1, 0, 0}, {0, 0, 1}}));
     }
 }
