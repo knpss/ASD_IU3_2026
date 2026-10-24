@@ -44,4 +44,29 @@ class Task52Test {
         }
         assertEquals(expected.replace("\n", System.lineSeparator()), buf.toString(StandardCharsets.UTF_8));
     }
+    @Test
+    void invalidInput() {
+        var in = new ByteArrayInputStream("0 2\n".getBytes(StandardCharsets.UTF_8));
+        var out = new PrintStream(new ByteArrayOutputStream());
+        assertThrows(IllegalArgumentException.class, () -> Task52.run(in, out));
+    }
+
+    @Test
+    void shouldNotChangeInput() {
+        int[][] a = {{5, -1}, {3, 4}};
+        assertArrayEquals(new int[] {3, -1}, Task52.solve(a));
+        assertArrayEquals(new int[] {5, -1}, a[0]);
+    }
+
+    @Test
+    void shouldRejectEmptyRow() {
+        assertThrows(IllegalArgumentException.class, () -> Task52.solve(new int[][] {{}}));
+        assertThrows(IllegalArgumentException.class, () -> Task52.solve(new int[][] {null}));
+    }
+
+    @Test
+    void shouldRejectZeroColumns() {
+        var in = new ByteArrayInputStream("1 0\n".getBytes(StandardCharsets.UTF_8));
+        assertThrows(IllegalArgumentException.class, () -> Task52.run(in, System.out));
+    }
 }
