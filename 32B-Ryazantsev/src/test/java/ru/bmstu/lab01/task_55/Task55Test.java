@@ -1,5 +1,4 @@
 package ru.bmstu.lab01.task_55;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.ByteArrayInputStream;
@@ -40,5 +39,24 @@ class Task55Test {
             Task55.run(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)), out);
         }
         assertEquals(expected.replace("\n", System.lineSeparator()), buf.toString(StandardCharsets.UTF_8));
+    }
+    @Test
+    void invalidInput() {
+        var in = new ByteArrayInputStream("0 2\n".getBytes(StandardCharsets.UTF_8));
+        var out = new PrintStream(new ByteArrayOutputStream());
+        assertThrows(IllegalArgumentException.class, () -> Task55.run(in, out));
+    }
+
+    @Test
+    void shouldRejectEmptyShape() {
+        assertThrows(IllegalArgumentException.class, () -> Task55.solve(new int[0][]));
+        assertThrows(IllegalArgumentException.class, () -> Task55.solve(new int[][] {{}}));
+        assertThrows(IllegalArgumentException.class, () -> Task55.solve(new int[][] {{1, 2}, null}));
+    }
+
+    @Test
+    void shouldRejectZeroColumns() {
+        var in = new ByteArrayInputStream("2 0\n".getBytes(StandardCharsets.UTF_8));
+        assertThrows(IllegalArgumentException.class, () -> Task55.run(in, System.out));
     }
 }
