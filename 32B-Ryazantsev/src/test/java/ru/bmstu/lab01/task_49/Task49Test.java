@@ -44,4 +44,32 @@ class Task49Test {
         }
         assertEquals(expected.replace("\n", System.lineSeparator()), buf.toString(StandardCharsets.UTF_8));
     }
+    @Test
+    void invalidInput() {
+        var in = new ByteArrayInputStream("0 2\n".getBytes(StandardCharsets.UTF_8));
+        var out = new PrintStream(new ByteArrayOutputStream());
+        assertThrows(IllegalArgumentException.class, () -> Task49.run(in, out));
+    }
+
+    @Test
+    void shouldHandleOneColumn() {
+        assertArrayEquals(new long[] {5, -2, 0}, Task49.solve(new int[][] {{5}, {-2}, {0}}));
+    }
+
+    @Test
+    void shouldRejectMissingFirstRow() {
+        assertThrows(IllegalArgumentException.class, () -> Task49.solve(new int[][] {null}));
+        assertThrows(IllegalArgumentException.class, () -> Task49.solve(new int[][] {{}}));
+    }
+
+    @Test
+    void shouldRejectZeroColumns() {
+        checkBadInput("2 0\n");
+    }
+
+    private void checkBadInput(String input) {
+        var in = new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));
+        var out = new PrintStream(new ByteArrayOutputStream());
+        assertThrows(IllegalArgumentException.class, () -> Task49.run(in, out));
+    }
 }
